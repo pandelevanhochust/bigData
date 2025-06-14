@@ -56,9 +56,9 @@ class TransactionConsumer:
                 consumer_timeout_ms=5000
             )
 
-            # Try to get metadata
-            metadata = test_consumer.list_consumer_groups()
-            logger.info("Successfully connected to Kafka broker")
+            # Try to get topic metadata instead of consumer groups
+            topics = test_consumer.topics()
+            logger.info(f"Successfully connected to Kafka broker. Available topics: {list(topics)}")
             test_consumer.close()
             return True
 
