@@ -111,7 +111,7 @@ class TransactionConsumer:
             if attempt < max_api_retries - 1:
                 time.sleep(2 ** attempt)  # Exponential backoff
 
-        logger.error(f"Failed to send transaction {transaction['transaction_id']} after {max_api_retries} attempts")
+        logger.error(f"Failed to send transaction {enhanced_transaction['transaction_id']} after {max_api_retries} attempts")
         return False
 
     def validate_transaction(self, transaction):
@@ -164,7 +164,10 @@ class TransactionConsumer:
                         logger.debug(
                             f"Message details - Topic: {message.topic}, Partition: {message.partition}, Offset: {message.offset}")
 
-                        self.send_to_api(transaction)
+                        if self.validate_transaction(transaction):
+                            self.send_to_api(transaction)
+                        else:
+                            logger.error(f"Invalid transaction data: {transaction}")
 
                     except json.JSONDecodeError as e:
                         logger.error(f"Failed to decode message JSON: {e}")
