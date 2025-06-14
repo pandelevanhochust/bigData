@@ -14,7 +14,8 @@ app = FastAPI(title="Fraud Detection API", version="1.0.0")
 # Enable CORS for React frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8000s"],  # In production, specify your frontend domain
+    allow_origins=["http://localhost:5173/",
+                   "https://54.251.172.36:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -331,7 +332,7 @@ async def health_check():
 if __name__ == "__main__":
     # Run the FastAPI server
     uvicorn.run(
-        "main:app",
+        "0.0.0.0",
         host="localhost",
         port=8000,
         reload=True,

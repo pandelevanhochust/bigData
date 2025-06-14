@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
 import { AlertTriangle, Shield, DollarSign, Clock, TrendingUp, TrendingDown, RefreshCw } from 'lucide-react';
 
-const API_BASE_URL = 'http://localhost:8000'; // Change to your EC2 FastAPI server URL
+const API_BASE_URL = 'https://54.251.172.36:8000'; // Change to your EC2 FastAPI server URL
 
 const FraudDetectionDashboard = () => {
   const [transactions, setTransactions] = useState([]);
