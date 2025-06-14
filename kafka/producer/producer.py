@@ -92,5 +92,5 @@ class TransactionProducer:
 
 
 if __name__ == "__main__":
-    producer = TransactionProducer(bootstrap_servers=['localhost:9092'])
+    producer = TransactionProducer(bootstrap_servers=['http://13.228.128.157:9092'])
     producer.start_streaming(interval=1)  # Send transaction every second

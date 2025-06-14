@@ -6,7 +6,7 @@ import requests
 
 
 class TransactionConsumer:
-    def __init__(self, bootstrap_servers, api_endpoint='http://localhost:8000'):
+    def __init__(self, bootstrap_servers, api_endpoint='http://54.251.172.36:8000'):
         self.consumer = KafkaConsumer(
             'transactions',
             bootstrap_servers=bootstrap_servers,
@@ -50,7 +50,7 @@ class TransactionConsumer:
 
 if __name__ == "__main__":
     consumer = TransactionConsumer(
-        bootstrap_servers=['kafka:9092'],
-        api_endpoint='http://backend:8000'
+        bootstrap_servers=['http://13.228.128.157:9092'],
+        api_endpoint='http://54.251.172.36:8000'
     )
     consumer.start_consuming()
