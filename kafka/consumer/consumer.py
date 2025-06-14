@@ -164,10 +164,7 @@ class TransactionConsumer:
                         logger.debug(
                             f"Message details - Topic: {message.topic}, Partition: {message.partition}, Offset: {message.offset}")
 
-                        if self.validate_transaction(transaction):
-                            self.send_to_api(transaction)
-                        else:
-                            logger.error(f"Invalid transaction data: {transaction}")
+                        self.send_to_api(transaction)
 
                     except json.JSONDecodeError as e:
                         logger.error(f"Failed to decode message JSON: {e}")
