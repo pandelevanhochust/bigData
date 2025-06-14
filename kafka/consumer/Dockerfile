@@ -15,7 +15,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY consumer.py .
 
 # Optional: If you want to use debug_kafka.py in same image
-COPY ../debug_kafka.py ./debug_kafka.py
+COPY ../debug_kafka.py .
 
 # Health check (connect to Kafka broker)
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \

@@ -15,7 +15,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY producer.py .
 
 # Optional debug script
-COPY ../debug_kafka.py ./debug_kafka.py
+COPY ../debug_kafka.py .
 
 # Health check (to ensure Python can start)
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
