@@ -3,6 +3,7 @@ import json
 import time
 import random
 import logging
+import os
 from datetime import datetime
 from kafka import KafkaProducer
 from kafka.errors import KafkaError
@@ -174,6 +175,9 @@ class TransactionProducer:
 
 
 if __name__ == "__main__":
-    # Remove 'http://' from bootstrap servers - Kafka doesn't use HTTP protocol
-    producer = TransactionProducer(bootstrap_servers=['13.228.128.157:9092'])
+    # Get Kafka brokers from environment variable or use default
+    kafka_brokers = os.getenv('KAFKA_BROKERS', '13.228.128.157:9092').split(',')
+    logger.info(f"Using Kafka brokers: {kafka_brokers}")
+
+    producer = TransactionProducer(bootstrap_servers=kafka_brokers)
     producer.start_streaming(interval=1)  # Send transaction every second
