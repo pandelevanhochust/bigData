@@ -28,7 +28,7 @@ services:
 
   kafka-debugger:
     build:
-      context: ./producer
+      context: .
       dockerfile: Dockerfile
     command: ["python", "debug_kafka.py"]
     environment:
