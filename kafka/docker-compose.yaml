@@ -1,22 +1,44 @@
-version: '3.8'
+version: "3.8"
 
 services:
-  zookeeper:
-    image: confluentinc/cp-zookeeper:7.4.1
-    ports:
-      - "2181:2181"
+  kafka-producer:
+    build:
+      context: ./producer
+      dockerfile: Dockerfile
     environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
+      - KAFKA_BROKERS=13.228.128.157:9092
+      - LOG_LEVEL=INFO
+    restart: unless-stopped
+    networks:
+      - kafka-network
 
-  kafka:
-    image: confluentinc/cp-kafka:7.4.1
-    ports:
-      - "9092:9092"
+  kafka-consumer:
+    build:
+      context: ./consumer
+      dockerfile: Dockerfile
     environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://13.228.128.157:9092
-      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_HEAP_OPTS: "-Xmx256M -Xms128M"
+      - KAFKA_BROKERS=13.228.128.157:9092
+      - API_ENDPOINT=http://54.251.172.36:8000
+      - LOG_LEVEL=INFO
+    restart: unless-stopped
+    networks:
+      - kafka-network
+    ports:
+      - "8080:8080"
+
+  kafka-debugger:
+    build:
+      context: ./producer
+      dockerfile: Dockerfile
+    command: ["python", "debug_kafka.py"]
+    environment:
+      - KAFKA_BROKERS=13.228.128.157:9092
+      - API_ENDPOINT=http://54.251.172.36:8000
+    networks:
+      - kafka-network
+    profiles:
+      - debug
+
+networks:
+  kafka-network:
+    driver: bridge
