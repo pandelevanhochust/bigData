@@ -10,7 +10,11 @@ app = FastAPI(title="Fraud Detection API", version="1.0.0")
 # Enable CORS for React frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173/", "https://54.251.172.36:3000"],
+    allow_origins=[
+                   "https://54.251.172.36:3000",
+                   "http://localhost:5173",
+                   "http://54.251.172.36:3000",
+                   ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
