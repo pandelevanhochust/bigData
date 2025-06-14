@@ -21,4 +21,4 @@ COPY debug_kafka.py .
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
   CMD python -c "import socket; socket.socket().connect(('13.228.128.157', 9092))" || exit 1
 
-CMD ["python", "consumer.py"]
+CMD ["python", "csv_consumer.py"]

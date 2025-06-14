@@ -111,8 +111,10 @@ class TransactionConsumer:
             if attempt < max_api_retries - 1:
                 time.sleep(2 ** attempt)  # Exponential backoff
 
-        logger.error(f"Failed to send transaction {enhanced_transaction['transaction_id']} after {max_api_retries} attempts")
+        logger.error(f"Failed to send transaction after {max_api_retries} attempts")
         return False
+
+    # def send_to_model(self,transaction):
 
     def validate_transaction(self, transaction):
         """Validate transaction data before sending to API"""
