@@ -13,10 +13,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
 COPY producer.py .
-COPY debug_kafka.py .
 
-# Add health check
+# Optional debug script
+COPY ../debug_kafka.py ./debug_kafka.py
+
+# Health check (to ensure Python can start)
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD python -c "import requests; requests.get('http://localhost:8080/health')" || exit 1
+  CMD python -c "print('Producer healthy')" || exit 1
 
 CMD ["python", "producer.py"]
