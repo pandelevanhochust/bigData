@@ -1,4 +1,5 @@
-FROM python:3.10
+FROM python:3.10-slim
 WORKDIR /app
-COPY transaction_producer.py .s
-CMD ["python", "transaction_producer.py"]
+COPY . .
+RUN pip install kafka-python faker requests
+CMD ["python", "producer.py"]

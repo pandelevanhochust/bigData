@@ -10,7 +10,7 @@ fake = Faker()
 
 
 class TransactionProducer:
-    def __init__(self, bootstrap_servers=['localhost:9092']):
+    def __init__(self, bootstrap_servers):
         self.producer = KafkaProducer(
             bootstrap_servers=bootstrap_servers,
             value_serializer=lambda x: json.dumps(x).encode('utf-8'),
@@ -92,6 +92,5 @@ class TransactionProducer:
 
 
 if __name__ == "__main__":
-    # Replace with your EC2 Kafka broker addresses
-    producer = TransactionProducer(bootstrap_servers=['your-ec2-kafka-broker:9092'])
+    producer = TransactionProducer(bootstrap_servers=['localhost:9092'])
     producer.start_streaming(interval=1)  # Send transaction every second
