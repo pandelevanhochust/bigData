@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { Database, RefreshCw, Plus, Trash2, Clock, TrendingUp, AlertCircle } from 'lucide-react';
 
-const API_BASE_URL = 'https://54.251.172.36:8000'; // Change to your EC2 FastAPI server URL
+const API_BASE_URL = 'http://54.251.172.36:8000'; // Change to your EC2 FastAPI server URL
 
 const TransactionDashboard = () => {
   const [transactions, setTransactions] = useState([]);
@@ -15,7 +15,6 @@ const TransactionDashboard = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [newTransaction, setNewTransaction] = useState('{}');
 
-  // Fetch data from API
   const fetchData = async () => {
     try {
       setLoading(true);
