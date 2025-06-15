@@ -6,7 +6,7 @@ import pandas as pd
 import requests
 import time
 from kafka import KafkaConsumer
-from xgboost.testing.data import joblib
+import joblib
 
 KAFKA_BROKER = os.getenv('KAFKA_BROKERS', '13.228.128.157:9092')
 TOPIC = 'transactions'
