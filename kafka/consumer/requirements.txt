@@ -6,3 +6,6 @@ xgboost==1.7.6
 requests
 scikit-learn
 loguru
+numpy==1.23.5
+pydantic==2.6.4
+
