@@ -12,7 +12,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
-COPY consumer.py .
+COPY csv_consumer.py .
 
 # Optional: If you want to use debug_kafka.py in same image
 COPY debug_kafka.py .

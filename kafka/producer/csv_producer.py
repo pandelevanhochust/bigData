@@ -23,7 +23,6 @@ producer = KafkaProducer(
 
 # === FUNCTION TO CLEAN FIELDS ===
 def clean_row(row):
-    # Optional: Normalize field names or types here
     row["transaction_id"] = f"{row.get('device_id', 'unknown')}_{int(time.time()*1000)}"
     row["user_id"] = row.get("device_id", "unknown")
     row["timestamp"] = f"{row.get('date', '')}T{row.get('time', '')}"
