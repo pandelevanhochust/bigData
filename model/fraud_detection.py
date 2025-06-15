@@ -12,7 +12,7 @@ TRANSACTION_API_URL = "http://54.251.172.36:8000/api/transactions"
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://13.214.239.8:8000"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
