@@ -1,8 +1,8 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from model.config import settings
-from model.model_service import model_service
-from model.schemas import PredictionInput, PredictionOutput, HealthCheck
+from config import settings
+from model_service import model_service
+from schemas import PredictionInput, PredictionOutput, HealthCheck
 from datetime import datetime
 from loguru import logger
 import requests

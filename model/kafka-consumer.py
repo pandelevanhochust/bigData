@@ -8,9 +8,9 @@ import requests
 from datetime import datetime
 import uuid
 
-from model.config import settings
-from model.model_service import model_service
-from model.schemas import PredictionInput, KafkaMessage
+from config import settings
+from model_service import model_service
+from schemas import PredictionInput, KafkaMessage
 
 class KafkaConsumerService:
     def __init__(self):

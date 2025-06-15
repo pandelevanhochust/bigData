@@ -5,7 +5,7 @@ from loguru import logger
 from typing import Dict, Any, List
 
 import config
-from model.schemas import PredictionInput, PredictionOutput
+from schemas import PredictionInput, PredictionOutput
 
 settings = config.settings
 
