@@ -1,18 +1,21 @@
 import json
 import logging
 import os
+
+import pandas as pd
 import requests
 import time
 from kafka import KafkaConsumer
+from xgboost.testing.data import joblib
 
-# === CONFIG ===
 KAFKA_BROKER = os.getenv('KAFKA_BROKERS', '13.228.128.157:9092')
 TOPIC = 'transactions'
-API_ENDPOINT = os.getenv('API_ENDPOINT', 'http://54.251.172.36:8000')  # adjust if needed
+API_ENDPOINT = os.getenv('API_ENDPOINT', 'http://54.251.172.36:8000/api/transactions')
+API__MODEL_ENDPOINT = os.getenv('API__MODEL_ENDPOINT', 'http://13.214.239.8:8000/api/transactions')
 
-# === LOGGING ===
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
 logger = logging.getLogger(__name__)
+scaler = joblib.load("scaler.pkl")
 
 # === KAFKA CONSUMER ===
 consumer = KafkaConsumer(
@@ -40,6 +43,36 @@ def post_to_api(txn):
     except Exception as e:
         logger.error(f"[✗] Failed to send to API: {e}")
 
+def post_to_api_model(xscale):
+    try:
+        response = requests.post(API__MODEL_ENDPOINT, json={"features": xscale}, timeout=5)
+        logger.info(f"POST status: {response.status_code}, Response: {response.text}")
+    except Exception as e:
+        logger.error(f"Error posting to API: {e}")
+
+def preprocessing(txn):
+    drop_cols = ['local_timestamp', 'time', 'date', 'IP', 'device_id', 'merchant_id']
+    txn = {k: v for k, v in txn.items() if k not in drop_cols}
+
+    # 2. Ensure required fields are present
+    categorical_cols = [
+        'currency', 'payment_channel', 'card_present', 'card_entry_mode',
+        'auth_result', 'tokenised', 'recurring_flag', 'cross_border',
+        'auth_characteristics', 'message_type', 'merchant_country',
+        'pin_verif_method', 'term_location'
+    ]
+
+    df = pd.DataFrame([txn])
+
+    for col in df.columns:
+        if df[col].dtype == 'object':
+            try:
+                df[col] = df[col].str.replace(',', '.').astype(float)
+            except:
+                pass
+    df = pd.get_dummies(df, columns=[col for col in categorical_cols if col in df.columns], drop_first=True)
+    x_scaled = scaler.transform(df)
+    return x_scaled.tolist()[0]
 
 def start_consuming():
     logger.info(f"Listening on topic '{TOPIC}' from broker '{KAFKA_BROKER}'")
@@ -48,7 +81,10 @@ def start_consuming():
         logger.info(f"Received: {txn.get('transaction_id', '[no id]')}")
 
         if is_valid_transaction(txn):
-            post_to_api(txn)
+            # post_to_api(txn)
+            xscale = preprocessing(txn)
+            post_to_api_model(xscale)
+
         else:
             logger.warning(f"Invalid transaction skipped: {txn}")
 

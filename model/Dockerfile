@@ -1,26 +1,26 @@
-FROM python:3.11-slim
+FROM python:3.10-slim
 
-WORKDIR /app
-
-# Install system dependencies
+# Install system packages
 RUN apt-get update && apt-get install -y \
     build-essential \
-    && rm -rf /var/lib/apt/lists/*
+    libgomp1 \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get install -y supervisor
 
-# Copy requirements and install Python dependencies
+# Set work directory
+WORKDIR /app
+
+# Copy dependencies
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
-COPY app/ ./app/
-COPY models/ ./models/
-COPY supervisord.conf .
+# Install Python dependencies
+RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# Create logs directory
-RUN mkdir -p logs
+# Copy the app code
+COPY . .
 
-# Expose port
+# Expose API port
 EXPOSE 8000
 
-# Use supervisor to manage processes
-CMD ["supervisord", "-c", "supervisord.conf"]
+# Start the API
+CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
