@@ -15,7 +15,7 @@ API__MODEL_ENDPOINT = os.getenv('API__MODEL_ENDPOINT', 'http://13.214.239.8:8000
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
 logger = logging.getLogger(__name__)
-scaler = joblib.load("scaler.pkl")
+# scaler = joblib.load("scaler.pkl")
 
 # === KAFKA CONSUMER ===
 consumer = KafkaConsumer(
