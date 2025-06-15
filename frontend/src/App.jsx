@@ -7,7 +7,8 @@ function App() {
 
   return (
     <>
-      <FraudDetectionDashboard/>
+      {/*<FraudDetectionDashboard/>*/}
+        <TransactionDashboard/>
     </>
   )
 }
