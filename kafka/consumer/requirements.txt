@@ -1,11 +1,21 @@
-kafka-python==2.0.2
-faker==19.6.2
-requests==2.31.0
-pandas==1.5.3
-xgboost==1.7.6
-requests
-scikit-learn
-loguru
-numpy==1.23.5
-pydantic==2.6.4
+# Kafka consumer
+kafka-python
 
+# HTTP requests
+requests
+
+# Logging
+loguru
+
+# Data handling and preprocessing
+pandas
+numpy
+
+# Model tools (Scaler, etc.)
+scikit-learn
+
+# If using XGBoost just for model file formats (optional)
+xgboost
+
+# For loading .pkl (joblib-based scaler)
+joblib
