@@ -1,11 +1,13 @@
 FROM python:3.10-slim
 
 # Install system packages
+
+# Install system packages
 RUN apt-get update && apt-get install -y \
     build-essential \
     libgomp1 \
-    && rm -rf /var/lib/apt/lists/* \
-    && apt-get install -y supervisor
+    supervisor \
+    && rm -rf /var/lib/apt/lists/*
 
 # Set work directory
 WORKDIR /app
