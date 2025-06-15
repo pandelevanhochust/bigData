@@ -1,14 +1,12 @@
-version: "3.8"
-
 services:
   model-api:
     container_name: model-api
     build:
-      context: ./model
+      context: .
     ports:
       - "8000:8000"
     env_file:
-      - ./model/.env
+      - .env
     volumes:
-      - ./model:/app
+      - .:/app
     restart: unless-stopped
