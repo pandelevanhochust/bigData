@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
-COPY requirements.txt .
+COPY requirement.txt .
 RUN pip install --no-cache-dir -r requirement.txt
 
 # Copy application code
