@@ -2,7 +2,6 @@ import xgboost as xgb
 import pandas as pd
 from loguru import logger
 from typing import Dict, Any
-
 import config
 from schemas import PredictionInput, PredictionOutput
 
@@ -47,9 +46,15 @@ class ModelService:
     def predict(self, prediction_input: PredictionInput) -> PredictionOutput:
         if not self.model:
             raise ValueError("Model not loaded")
-        dmatrix = self.preprocess_features(prediction_input.features)
+
+        df = self.preprocess_features(prediction_input.features)
+
+        # ✅ Convert DataFrame to DMatrix
+        dmatrix = xgb.DMatrix(df)
+
         pred_probs = self.model.predict(dmatrix)
         prediction = float(pred_probs[0] > 0.5)
+
         return PredictionOutput(prediction=prediction, probability=pred_probs.tolist())
 
     def is_model_loaded(self):
