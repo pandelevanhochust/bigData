@@ -1,8 +1,7 @@
-import pickle
+import xgboost as xgb
 import pandas as pd
-import numpy as np
 from loguru import logger
-from typing import Dict, Any, List
+from typing import Dict, Any
 
 import config
 from schemas import PredictionInput, PredictionOutput
@@ -11,31 +10,25 @@ settings = config.settings
 
 class ModelService:
     def __init__(self):
-        self.model = None
+        self.model: xgb.Booster = None
         self.feature_names = None
         self.model_version = "1.0"
         self.load_model()
 
     def load_model(self):
         try:
-            with open(settings.model_path, 'rb') as f:
-                self.model = pickle.load(f)
-            if hasattr(self.model, 'feature_names_in_'):
-                self.feature_names = self.model.feature_names_in_
+            self.model = xgb.Booster()
+            self.model.load_model(settings.model_path)
             logger.info(f"Model loaded from {settings.model_path}")
             return True
         except Exception as e:
             logger.error(f"Failed to load model: {e}")
             return False
 
-    def preprocess_features(self, features: Dict[str, Any]) -> pd.DataFrame:
+    def preprocess_features(self, features: Dict[str, Any]) -> xgb.DMatrix:
         try:
             df = pd.DataFrame([features]).fillna(0)
-            if self.feature_names:
-                for feature in set(self.feature_names) - set(df.columns):
-                    df[feature] = 0
-                df = df[self.feature_names]
-            return df
+            return xgb.DMatrix(df)
         except Exception as e:
             logger.error(f"Preprocessing error: {e}")
             raise
@@ -43,13 +36,10 @@ class ModelService:
     def predict(self, prediction_input: PredictionInput) -> PredictionOutput:
         if not self.model:
             raise ValueError("Model not loaded")
-        features = self.preprocess_features(prediction_input.features)
-        prediction = self.model.predict(features)[0]
-        probability = None
-        if hasattr(self.model, 'predict_proba'):
-            proba = self.model.predict_proba(features)[0]
-            probability = proba.tolist()
-        return PredictionOutput(prediction=float(prediction), probability=probability)
+        dmatrix = self.preprocess_features(prediction_input.features)
+        pred_probs = self.model.predict(dmatrix)
+        prediction = float(pred_probs[0] > 0.5)
+        return PredictionOutput(prediction=prediction, probability=pred_probs.tolist())
 
     def is_model_loaded(self):
         return self.model is not None
