@@ -6,7 +6,6 @@ import pandas as pd
 import requests
 import time
 from kafka import KafkaConsumer
-import joblib
 
 KAFKA_BROKER = os.getenv('KAFKA_BROKERS', '13.228.128.157:9092')
 TOPIC = 'transactions'
@@ -71,8 +70,8 @@ def preprocessing(txn):
             except:
                 pass
     df = pd.get_dummies(df, columns=[col for col in categorical_cols if col in df.columns], drop_first=True)
-    x_scaled = scaler.transform(df)
-    return x_scaled.tolist()[0]
+    return df.fillna(0).values.tolist()[0]  # or simply df.to_dict() if model expects JSON
+
 
 def start_consuming():
     logger.info(f"Listening on topic '{TOPIC}' from broker '{KAFKA_BROKER}'")

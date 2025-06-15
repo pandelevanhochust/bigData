@@ -17,5 +17,3 @@ scikit-learn
 # If using XGBoost just for model file formats (optional)
 xgboost
 
-# For loading .pkl (joblib-based scaler)
-joblib
