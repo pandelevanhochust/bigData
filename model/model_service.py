@@ -4,8 +4,10 @@ import numpy as np
 from loguru import logger
 from typing import Dict, Any, List
 
-from model.config import settings
+import config
 from model.schemas import PredictionInput, PredictionOutput
+
+settings = config.settings
 
 class ModelService:
     def __init__(self):
