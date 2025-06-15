@@ -70,7 +70,7 @@ def preprocessing(txn):
             except:
                 pass
     df = pd.get_dummies(df, columns=[col for col in categorical_cols if col in df.columns], drop_first=True)
-    return df.fillna(0).values.tolist()[0]  # or simply df.to_dict() if model expects JSON
+    return df.fillna(0).iloc[0].to_dict()
 
 
 def start_consuming():
