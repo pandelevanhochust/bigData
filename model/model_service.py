@@ -25,10 +25,21 @@ class ModelService:
             logger.error(f"Failed to load model: {e}")
             return False
 
-    def preprocess_features(self, features: Dict[str, Any]) -> xgb.DMatrix:
+    def preprocess_features(self, features: Dict[str, Any]) -> pd.DataFrame:
         try:
-            df = pd.DataFrame([features]).fillna(0)
-            return xgb.DMatrix(df)
+            # Remove non-numeric / ID fields that are not used by the model
+            exclude = ['transaction_id', 'user_id', 'timestamp']
+            features_cleaned = {k: v for k, v in features.items() if k not in exclude}
+
+            df = pd.DataFrame([features_cleaned]).fillna(0)
+
+            # Ensure correct order of features
+            if self.feature_names:
+                for feature in set(self.feature_names) - set(df.columns):
+                    df[feature] = 0  # Fill missing columns with 0
+                df = df[self.feature_names]
+
+            return df
         except Exception as e:
             logger.error(f"Preprocessing error: {e}")
             raise
