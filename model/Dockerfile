@@ -35,5 +35,5 @@ COPY . /app
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-CMD ["uvicorn", "model_service:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "fraud_detection:app", "--host", "0.0.0.0", "--port", "8000"]
 
